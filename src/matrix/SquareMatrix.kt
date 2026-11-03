@@ -2,6 +2,10 @@ package matrix
 
 import kotlin.collections.forEachIndexed
 
+fun Array<DoubleArray>.toStr(): String {
+    return this.joinToString(separator = "\n") { it.joinToString(separator = " ") }
+}
+
 operator fun Array<DoubleArray>.div(value: Double): Array<DoubleArray> {
     val result = Array(size) { DoubleArray(size) }
     val matrix = this
@@ -24,17 +28,19 @@ fun Array<DoubleArray>.transposedMatrix(): Array<DoubleArray> {
     return result
 }
 
-fun Array<DoubleArray>.inverseMatrix(): Array<DoubleArray> {
-    val algebraicComplementMatrix = Array(size) { DoubleArray(size) }
-    val matrix = this
-    val determinant = determinant()
-    matrix.forEachIndexed { i, row ->
-        row.forEachIndexed { j, el ->
-            algebraicComplementMatrix[i][j] = algebraicComplement(i, j)
-        }
-    }
-    return algebraicComplementMatrix.transposedMatrix() / determinant
-}
+//fun Array<DoubleArray>.inverseMatrix(): Array<DoubleArray> {
+//    val algebraicComplementMatrix = Array(size) { DoubleArray(size) }
+//    val matrix = this.transposedMatrix()
+//    val determinant = determinant()
+//    matrix.forEachIndexed { i, row ->
+//        row.forEachIndexed { j, el ->
+//            algebraicComplementMatrix[i][j] = algebraicComplement(i, j)
+//        }
+//    }
+//    println("Матрица алг. доп.: ")
+//    println(algebraicComplementMatrix.joinToString(separator = "\n") { it.joinToString(separator = " ")})
+//    return algebraicComplementMatrix / determinant
+//}
 
 fun Array<DoubleArray>.algebraicComplement(i: Int, j: Int): Double { // i, j - как индексы массива (т.е. начало с 0)
     return (if (i + j % 2.0 == 0.0) 1 else -1) * this.minor(i, j)

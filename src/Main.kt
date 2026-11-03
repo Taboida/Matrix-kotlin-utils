@@ -1,18 +1,22 @@
 import matrix.determinant
-import matrix.inverseMatrix
+import matrix.div
+import matrix.toStr
+import matrix.transposedMatrix
 
 fun main() {
     val matrix = arrayOf(
-        doubleArrayOf(2.0, 5.0),
-        doubleArrayOf(1.0, 3.0),
+        doubleArrayOf(2.0, 4.0, 6.0),
+        doubleArrayOf(0.0, 2.0, 8.0),
+        doubleArrayOf(10.0, 12.0, 0.0),
     )
 
     println("Матрица: ")
-    println(matrix.joinToString(separator = "\n") { it.joinToString(separator = " ")})
+    println((matrix / 2.0).toStr())
 
-    println()
-    println("Обратная матрица: ")
-    println(matrix.inverseMatrix().joinToString(separator = "\n") { it.joinToString(separator = " ")})
+//    println()
+//    println("Матрица алг. доп.: ")
+//    println(matrix.transposedMatrix().joinToString(separator = "\n") { it.joinToString(separator = " ")})
+
     println()
     println("Определитель: ${matrix.determinant()}")
 }
