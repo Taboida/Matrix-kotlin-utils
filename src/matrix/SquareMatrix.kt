@@ -1,32 +1,30 @@
 package matrix
 
+fun Array<IntArray>.algebraicComplement(i: Int, j: Int): Int {
+    return (if (i + j % 2 == 0) 1 else -1) * this.minor(1, j+1)
+}
+
 fun Array<IntArray>.minor(i: Int, j: Int): Int {
     val mList = this.toMutableList()
     mList.remove(this[i - 1])
-    val matrixForMinor = mList.map { row -> row.filterIndexed { index, el -> index + 1 != j } }
-    val d = matrixForMinor.determinant()
-//    println("Минор для i: $i, j: $j равен $d")
-//    println(matrixForMinor.joinToString(separator = "\n") { it.joinToString(separator = " ")})
-//    println()
-    return d
+    val matrixForMinor = mList.map { row -> row.filterIndexed { index, _ -> index + 1 != j } }
+    return matrixForMinor.determinant()
 }
 
 fun Array<IntArray>.determinant(): Int {
-    require(this.all { it.size == this.size })
+    val m = this // для дальнейшей лаконичности и понятности назовем текущий массив m (от слова matrix)
+    require(m.all { it.size == m.size })
 
     var determinant = 0
-    var iteration = 1
-    when (this.size) {
-        1 -> determinant = this[0][0]
-        2 -> determinant = this[0][0] * this[1][1] - this[0][1] * this[1][0]
+    when (m.size) {
+        1 -> determinant = m[0][0]
+        2 -> determinant = m[0][0] * m[1][1] - m[0][1] * m[1][0]
         3 -> {
-            determinant = this[0][0]*this[1][1]*this[2][2] + this[0][1]*this[1][2]*this[2][0] + this[0][2]*this[1][0]*this[2][1] -
-                    this[0][2]*this[1][1]*this[2][0] - this[0][0]*this[1][2]*this[2][1] - this[0][1]*this[1][0]*this[2][2]
+            determinant = m[0][0]*m[1][1]*m[2][2] + m[0][1]*m[1][2]*m[2][0] + m[0][2]*m[1][0]*m[2][1] -
+                    m[0][2]*m[1][1]*m[2][0] - m[0][0]*m[1][2]*m[2][1] - m[0][1]*m[1][0]*m[2][2]
         }
-        else -> this[0].indices.forEach { j -> // разложение по 1-й строке
-            val algebraicComplement = (if (iteration % 2 != 0) 1 else -1) * this.minor(1, j+1)
-            determinant += algebraicComplement * this[0][j] // элемент умноженый на его алгебраическое дополнение
-            iteration++
+        else -> m[0].indices.forEach { j -> // разложение по 1-й строке
+            determinant += algebraicComplement(0, j) * m[0][j] // элемент умноженый на его алгебр. дополнение
         }
     }
 
